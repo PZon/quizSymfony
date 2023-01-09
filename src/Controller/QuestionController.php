@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Question;
 use App\Service\MarkdownHelper;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,13 +34,46 @@ class QuestionController extends AbstractController
     }
 
     /**
-     * @Route("/quests/{anyWord}", name="questionShow")
+     * @Route("/quests/new")
      */
-    public function show($anyWord, MarkdownHelper $markdownHelper){
+    public function new(EntityManagerInterface $emi){
+        $question = new Question();
+        $question->setName('Missing pants')
+                ->setSlug('missing-pants-'.rand(0,100))
+                ->setQuestion('Some strange sentence BLE BLE BLE ...?');
+
+            if (rand(1,10)>2){
+                $question->setAskedAt(new \DateTimeImmutable(sprintf('-%d days', rand(1, 100))));
+            }
+
+            $emi->persist($question);
+            $emi->flush();
+
+       return new Response(sprintf('Well hallo! The shiny new question is id #%d, slug: %s',
+            $question->getId(),
+            $question->getSlug()    
+        ));
+
+        //return new Response('bele text');
+    }
+
+    /**
+     * @Route("/quests/{slug}", name="questionShow")
+     */
+    public function show($slug, MarkdownHelper $markdownHelper, EntityManagerInterface $emi){
 
         if($this->isDebug){
             $this->logger->info('We are in DEBUG MODE');
         }
+
+     //   $repository = $emi->getRepository(Question::class);
+     //   $question = $repository->findOneBy(['slug' => $slug]);
+
+      //  if(!$question){
+      //      throw $this->createNotFoundException(sprintf('no question found for slug "%s"', $slug));
+      //  }
+
+     //   dd($question);
         
         $answers = [
             'answer `txt` One',
@@ -45,25 +81,14 @@ class QuestionController extends AbstractController
             'answer Three',
         ];
 
-        //dump($anyWord, $this);
-        //dd($anyWord, $this);
-
         $questionTxt = "I've been turned into a cat, any thoughts on how to turn back? While I'm **adorable**, I don't really care for cat food.";
-       /* $parsedQuestionTxt = $cache->get('markdown_'.md5($questionTxt), function() use ($questionTxt,$markdownParser){
-            return $markdownParser->transformMarkdown($questionTxt);
-        });*/
-       // $parsedQuestionTxt = $markdownParser->transformMarkdown($questionTxt);
-          $parsedQuestionTxt = $markdownHelper->parse($questionTxt);   
-
-       //dd($markdownParser);
-       //dump($cache);
+        $parsedQuestionTxt = $markdownHelper->parse($questionTxt);   
 
         return $this->render('question/show.html.twig',[
-            'question'=>ucwords(str_replace('-',' ',$anyWord)),
+            'question'=>ucwords(str_replace('-',' ',$slug)),
             'answers'=>$answers,
             //'questionTxt'=>$questionTxt,
             'questionTxt'=>$parsedQuestionTxt,
         ]);
     }
-
 }
