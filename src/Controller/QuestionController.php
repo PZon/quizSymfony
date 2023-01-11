@@ -29,8 +29,6 @@ class QuestionController extends AbstractController
      * @Route("/", name="homePage")
      */
     public function homepage(QuestionRepository $repository){
-
-        //$repository=$emi->getRepository(Question::class);
        // $questions=$repository->findBy([],['askedAt'=>'DESC']);
         $questions=$repository->findAllAskedOrderedByNewest();
         //dd($questions);
