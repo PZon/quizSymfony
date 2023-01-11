@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Question;
 use App\Service\MarkdownHelper;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -51,7 +50,7 @@ class QuestionController extends AbstractController
 
        return new Response(sprintf('Well hallo! The shiny new question is id #%d, slug: %s',
             $question->getId(),
-            $question->getSlug()    
+            $question->getSlug()  
         ));
 
         //return new Response('bele text');
@@ -60,20 +59,21 @@ class QuestionController extends AbstractController
     /**
      * @Route("/quests/{slug}", name="questionShow")
      */
-    public function show($slug, MarkdownHelper $markdownHelper, EntityManagerInterface $emi){
+    public function show($slug, MarkdownHelper $markdownHelper, EntityManagerInterface $em){
 
         if($this->isDebug){
             $this->logger->info('We are in DEBUG MODE');
         }
 
-     //   $repository = $emi->getRepository(Question::class);
-     //   $question = $repository->findOneBy(['slug' => $slug]);
+        $repository = $em->getRepository(Question::class);
+        /**  @var Question|null $question */
+        $question = $repository->findOneBy(['slug' => $slug]);
 
-      //  if(!$question){
-      //      throw $this->createNotFoundException(sprintf('no question found for slug "%s"', $slug));
-      //  }
+        if(!$question){
+            throw $this->createNotFoundException(sprintf('No question found for slug "%s" - pzon', $slug));
+        }
 
-     //   dd($question);
+        //dd($question);     
         
         $answers = [
             'answer `txt` One',
@@ -81,14 +81,15 @@ class QuestionController extends AbstractController
             'answer Three',
         ];
 
-        $questionTxt = "I've been turned into a cat, any thoughts on how to turn back? While I'm **adorable**, I don't really care for cat food.";
-        $parsedQuestionTxt = $markdownHelper->parse($questionTxt);   
+       /* $questionTxt = "I've been turned into a cat, any thoughts on how to turn back? While I'm **adorable**, I don't really care for cat food.";
+        $parsedQuestionTxt = $markdownHelper->parse($questionTxt);   */
 
         return $this->render('question/show.html.twig',[
-            'question'=>ucwords(str_replace('-',' ',$slug)),
+            //'question'=>ucwords(str_replace('-',' ',$slug)),
+            'question'=>$question,
             'answers'=>$answers,
             //'questionTxt'=>$questionTxt,
-            'questionTxt'=>$parsedQuestionTxt,
+           // 'questionTxt'=>$parsedQuestionTxt,
         ]);
     }
 }
