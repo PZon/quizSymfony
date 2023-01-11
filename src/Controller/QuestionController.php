@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Question;
+use App\Repository\QuestionRepository;
 use App\Service\MarkdownHelper;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,10 +28,14 @@ class QuestionController extends AbstractController
     /**
      * @Route("/", name="homePage")
      */
-    public function homepage(Environment $environment){
-        /* $html= $environment->render('question/homepage.html.twig');
-        return new Response($html); */
-       return $this->render('question/homepage.html.twig');
+    public function homepage(QuestionRepository $repository){
+
+        //$repository=$emi->getRepository(Question::class);
+       // $questions=$repository->findBy([],['askedAt'=>'DESC']);
+        $questions=$repository->findAllAskedOrderedByNewest();
+        //dd($questions);
+
+       return $this->render('question/homepage.html.twig', ['questions'=>$questions,]);
     }
 
     /**
@@ -52,8 +58,6 @@ class QuestionController extends AbstractController
             $question->getId(),
             $question->getSlug()  
         ));
-
-        //return new Response('bele text');
     }
 
     /**
@@ -72,8 +76,6 @@ class QuestionController extends AbstractController
         if(!$question){
             throw $this->createNotFoundException(sprintf('No question found for slug "%s" - pzon', $slug));
         }
-
-        //dd($question);     
         
         $answers = [
             'answer `txt` One',
@@ -81,15 +83,9 @@ class QuestionController extends AbstractController
             'answer Three',
         ];
 
-       /* $questionTxt = "I've been turned into a cat, any thoughts on how to turn back? While I'm **adorable**, I don't really care for cat food.";
-        $parsedQuestionTxt = $markdownHelper->parse($questionTxt);   */
-
         return $this->render('question/show.html.twig',[
-            //'question'=>ucwords(str_replace('-',' ',$slug)),
             'question'=>$question,
             'answers'=>$answers,
-            //'questionTxt'=>$questionTxt,
-           // 'questionTxt'=>$parsedQuestionTxt,
         ]);
     }
 }
