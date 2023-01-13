@@ -61,19 +61,12 @@ class QuestionController extends AbstractController
     /**
      * @Route("/quests/{slug}", name="questionShow")
      */
-    public function show($slug, MarkdownHelper $markdownHelper, EntityManagerInterface $em){
+    public function show(Question $question){
 
         if($this->isDebug){
             $this->logger->info('We are in DEBUG MODE');
         }
 
-        $repository = $em->getRepository(Question::class);
-        /**  @var Question|null $question */
-        $question = $repository->findOneBy(['slug' => $slug]);
-
-        if(!$question){
-            throw $this->createNotFoundException(sprintf('No question found for slug "%s" - pzon', $slug));
-        }
         
         $answers = [
             'answer `txt` One',
