@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
@@ -43,7 +44,10 @@ class QuestionController extends AbstractController
         $question = new Question();
         $question->setName('Missing pants')
                 ->setSlug('missing-pants-'.rand(0,100))
+                ->setVotes(rand(-13,13))
                 ->setQuestion('Some strange sentence BLE BLE BLE ...?');
+
+
 
             if (rand(1,10)>2){
                 $question->setAskedAt(new \DateTimeImmutable(sprintf('-%d days', rand(1, 100))));
@@ -78,5 +82,18 @@ class QuestionController extends AbstractController
             'question'=>$question,
             'answers'=>$answers,
         ]);
+    }
+
+    /**
+     * @Route("/quests/{slug}/vote", name="app_question_vote", methods="POST")
+     */
+    public function questionVote(Question $question, Request $request){
+       $direction = $request->request->get('direction');
+       if($direction === 'up'){
+        $question->setVotes($question->getVotes()+1);
+       }elseif($direction === 'down'){
+        $question->setVotes($question->getVotes()-1);
+       }
+       dd($question);
     }
 }
