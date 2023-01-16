@@ -111,4 +111,14 @@ class Question
 
         return $this;
     }
+
+    public function upVote(){
+        $this->votes++;
+        return $this;
+    }
+
+    public function downVote(){
+        $this->votes--;
+        return $this;
+    }
 }
