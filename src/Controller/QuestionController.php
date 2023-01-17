@@ -40,8 +40,9 @@ class QuestionController extends AbstractController
     /**
      * @Route("/quests/new")
      */
-    public function new(EntityManagerInterface $emi){
-        $question = new Question();
+    //public function new(EntityManagerInterface $emi){
+    public function new(){
+      /*  $question = new Question();
         $question->setName('Missing pants')
                 ->setSlug('missing-pants-'.rand(0,100))
                 ->setVotes(rand(-13,13))
@@ -59,7 +60,9 @@ class QuestionController extends AbstractController
        return new Response(sprintf('Well hallo! The shiny new question is id #%d, slug: %s',
             $question->getId(),
             $question->getSlug()  
-        ));
+        ));*/
+
+        return new Response('Sounds like a GREAT feature for V2!');
     }
 
     /**
