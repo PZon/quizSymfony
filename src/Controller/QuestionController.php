@@ -30,9 +30,8 @@ class QuestionController extends AbstractController
      * @Route("/", name="homePage")
      */
     public function homepage(QuestionRepository $repository){
-       // $questions=$repository->findBy([],['askedAt'=>'DESC']);
+        
         $questions=$repository->findAllAskedOrderedByNewest();
-        //dd($questions);
 
        return $this->render('question/homepage.html.twig', ['questions'=>$questions,]);
     }
@@ -42,26 +41,6 @@ class QuestionController extends AbstractController
      */
     //public function new(EntityManagerInterface $emi){
     public function new(){
-      /*  $question = new Question();
-        $question->setName('Missing pants')
-                ->setSlug('missing-pants-'.rand(0,100))
-                ->setVotes(rand(-13,13))
-                ->setQuestion('Some strange sentence BLE BLE BLE ...?');
-
-
-
-            if (rand(1,10)>2){
-                $question->setAskedAt(new \DateTimeImmutable(sprintf('-%d days', rand(1, 100))));
-            }
-
-            $emi->persist($question);
-            $emi->flush();
-
-       return new Response(sprintf('Well hallo! The shiny new question is id #%d, slug: %s',
-            $question->getId(),
-            $question->getSlug()  
-        ));*/
-
         return new Response('Sounds like a GREAT feature for V2!');
     }
 
