@@ -10,21 +10,24 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CommentController extends AbstractController{
+class AnswerController extends AbstractController{
 
     /**
      * @Route("/comments/{id}/vote/{direction<up|down>}", methods="POST", name="answer_vote")
      */
-    public function commentVote($id, $direction, LoggerInterface $logger){
+    public function commentVote(Answer $answer, $direction, LoggerInterface $logger, Request $request, EntityManagerInterface $em){
         
         if ($direction ==='up'){
             $logger->info('voting UP');
-            $currentVoteCount = rand(7,130);
+            $answer->setVotes($answer->getVotes()+1);
+           // $currentVoteCount = rand(7,130);
         }else{
             $logger->info('voting DOWN');
-            $currentVoteCount = rand(1,6);
+            $answer->setVotes($answer->getVotes() - 1);
+           // $currentVoteCount = rand(1,6);
         }
         //return new JsonResponse(['votes'=>$currentVoteCount]); //działanie takie samo jak poniżej
-        return $this->json(['votes'=>$currentVoteCount]);
+        //return $this->json(['votes'=>$currentVoteCount]);
+        return $this->json(['votes' => $answer->getVotes()]);
     }
 }
