@@ -82,6 +82,16 @@ class Answer
         return $this;
     }
 
+    public function commentsUpVote(){
+        $this->votes++;
+        return $this;
+    }
+
+    public function commentsDownVote(){
+        $this->votes--;
+        return $this;
+    }
+
     public function getQuestion(): ?Question
     {
         return $this->question;
