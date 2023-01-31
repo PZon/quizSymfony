@@ -15,19 +15,16 @@ class AnswerController extends AbstractController{
     /**
      * @Route("/comments/{id}/vote/{direction<up|down>}", methods="POST", name="answer_vote")
      */
-    public function commentVote(Answer $answer, $direction, LoggerInterface $logger, Request $request, EntityManagerInterface $em){
+    public function commentVote($id, $direction, LoggerInterface $logger){
         
         if ($direction ==='up'){
             $logger->info('voting UP');
-            $answer->setVotes($answer->getVotes()+1);
-           // $currentVoteCount = rand(7,130);
+            $currentVoteCount = rand(7,130);
         }else{
             $logger->info('voting DOWN');
-            $answer->setVotes($answer->getVotes() - 1);
-           // $currentVoteCount = rand(1,6);
+            $currentVoteCount = rand(1,6);
         }
         //return new JsonResponse(['votes'=>$currentVoteCount]); //działanie takie samo jak poniżej
-        //return $this->json(['votes'=>$currentVoteCount]);
-        return $this->json(['votes' => $answer->getVotes()]);
+        return $this->json(['votes'=>$currentVoteCount]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Answer;
+use App\Entity\Question;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,18 +14,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class AnswerController extends AbstractController{
 
     /**
-     * @Route("/comments/{id}/vote/{direction<up|down>}", methods="POST", name="answer_vote")
+     * @Route("/comments/{id}/vote", methods="POST", name="answer_vote")
      */
-    public function commentVote($id, $direction, LoggerInterface $logger){
-        
+    public function commentVote(Answer $answer, Request $request, EntityManagerInterface $em){
+        $direction= $request->request->get('direction');
         if ($direction ==='up'){
-            $logger->info('voting UP');
-            $currentVoteCount = rand(7,130);
+           $answer->commentsUpVote();
         }else{
-            $logger->info('voting DOWN');
-            $currentVoteCount = rand(1,6);
+          $answer->commentsDownVote(); 
         }
+
+        $em->flush();
+        
         //return new JsonResponse(['votes'=>$currentVoteCount]); //działanie takie samo jak poniżej
-        return $this->json(['votes'=>$currentVoteCount]);
+        return $this->json(['votes'=>$answer->getVotes()]);
     }
 }
