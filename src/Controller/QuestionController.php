@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Answer;
 use App\Entity\Question;
 use App\Repository\AnswerRepository;
 use App\Repository\QuestionRepository;
@@ -40,7 +41,6 @@ class QuestionController extends AbstractController
     /**
      * @Route("/quests/new")
      */
-    //public function new(EntityManagerInterface $emi){
     public function new(){
         return new Response('Sounds like a GREAT feature for V2!');
     }
@@ -53,7 +53,7 @@ class QuestionController extends AbstractController
         if($this->isDebug){
             $this->logger->info('We are in DEBUG MODE');
         }
-
+        
         return $this->render('question/show.html.twig',[
             'question'=>$question,
         ]);
