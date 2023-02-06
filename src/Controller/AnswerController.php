@@ -25,8 +25,9 @@ class AnswerController extends AbstractController{
         }
 
         $em->flush();
+        $question=$answer->getQuestion();
         
-        //return new JsonResponse(['votes'=>$currentVoteCount]); //działanie takie samo jak poniżej
-        return $this->json(['votes'=>$answer->getVotes()]);
+        return $this->redirectToRoute('questionShow', ['slug'=> $question->getSlug()]);
+      
     }
 }
