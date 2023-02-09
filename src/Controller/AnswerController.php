@@ -34,8 +34,10 @@ class AnswerController extends AbstractController{
     /**
      * @Route("/answers/popular", name="popular_answers")
      */
-    public function popularAnswers(AnswerRepository $ar){
-      $answers = $ar->findMostPopular();
+    public function popularAnswers(AnswerRepository $ar, Request $request){
+      $answers = $ar->findMostPopular(
+        $request->query->get('q')
+      );
 
       return $this->render('answer/popularAnswer.html.twig', ['answers'=>$answers]);
     }
