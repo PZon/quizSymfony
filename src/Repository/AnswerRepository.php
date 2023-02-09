@@ -60,12 +60,20 @@ class AnswerRepository extends ServiceEntityRepository
     /**
      * @return Answer[] 
      */
-    public function findMostPopular(): array{
-        return $this->createQueryBuilder('answer')
+    public function findMostPopular(string $search = null): array{
+
+        $queryBuilder = $this->createQueryBuilder('answer')
             ->addCriteria(self::createApprovedCriteria())
             ->orderBy('answer.votes', 'DESC')
             ->innerJoin('answer.question','question')
-            ->addSelect('question')
+            ->addSelect('question');
+
+        if($search){
+            $queryBuilder->andWhere('answer.content LIKE :searchTerm OR question.question LIKE :searchTerm')
+            ->setParameter('searchTerm', '%'.$search.'%');
+        }
+
+        return $queryBuilder   
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
