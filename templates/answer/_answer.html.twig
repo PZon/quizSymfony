@@ -2,7 +2,7 @@
             {% if showQuestion|default(false) %}
                 <a href="{{path('questionShow',
                 {slug: answer.question.slug}) }}" class="mb-1 link-secondary"> 
-                    <strong>Question:</strong>{{answer.question.question}}
+                    <strong>Question:</strong>{{answer.questionTxt|u.truncate(80,'...')}}
                 </a>
             {% endif %}
                 <div class="row">
