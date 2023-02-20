@@ -9,6 +9,7 @@ use App\Entity\Question;
 use App\Entity\Tag;
 use App\Factory\AnswerFactory;
 use App\Factory\QuestionFactory;
+use App\Factory\QuestionTagFactory;
 use App\Factory\TagFactory;
 
 class AppFixtures extends Fixture
@@ -18,14 +19,19 @@ class AppFixtures extends Fixture
         
     TagFactory::createMany(13);
 
-     $questions=QuestionFactory::new()->createMany(13, function(){
-        return[
-        'tags'=>TagFactory::randomRange(0,3),
+
+     $questions=QuestionFactory::new()->createMany(13);   
+
+     QuestionTagFactory::createMany(13, function() {
+        return [
+            'tag' => TagFactory::random(),
+            'question' => QuestionFactory::random(),
         ];
-    });      
+    });
      
      QuestionFactory:: new()->unpublished()
-                            ->createMany(3);
+                            ->many(5)
+                            ->create();
     
     AnswerFactory::new()->createMany(21, function() use($questions){
         return[
