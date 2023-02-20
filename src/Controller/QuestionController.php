@@ -14,6 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Twig\Environment;
 
 
@@ -33,9 +35,13 @@ class QuestionController extends AbstractController
      */
     public function homepage(QuestionRepository $repository){
         
-        $questions=$repository->findAllAskedOrderedByNewest();
+       // $questions=$repository->findAllAskedOrderedByNewest();
+       $queryBilder = $repository->createAskedOrderedByNewestQueryBuilder();
 
-       return $this->render('question/homepage.html.twig', ['questions'=>$questions,]);
+       $pagerfanta = new Pagerfanta(new QueryAdapter($queryBilder));
+       $pagerfanta->setMaxPerPage(5);
+
+       return $this->render('question/homepage.html.twig', ['pager'=>$pagerfanta,]);
     }
 
     /**
