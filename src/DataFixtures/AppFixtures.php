@@ -11,6 +11,7 @@ use App\Factory\AnswerFactory;
 use App\Factory\QuestionFactory;
 use App\Factory\QuestionTagFactory;
 use App\Factory\TagFactory;
+use App\Factory\UserFactory;
 
 class AppFixtures extends Fixture
 {
@@ -20,7 +21,7 @@ class AppFixtures extends Fixture
     TagFactory::createMany(13);
 
 
-     $questions=QuestionFactory::new()->createMany(13);   
+     $questions=QuestionFactory::new()->createMany(30);   
 
      QuestionTagFactory::createMany(13, function() {
         return [
@@ -33,7 +34,7 @@ class AppFixtures extends Fixture
                             ->many(5)
                             ->create();
     
-    AnswerFactory::new()->createMany(21, function() use($questions){
+    AnswerFactory::new()->createMany(50, function() use($questions){
         return[
             'question'=>$questions[array_rand($questions)],
         ];
@@ -43,8 +44,10 @@ class AppFixtures extends Fixture
         return[
             'question'=>$questions[array_rand($questions)],
         ];
-    })->needsApproval()->many(10)->create();
+    })->needsApproval()->many(5)->create();
 
+    UserFactory::createOne(['email' => 'pl@pl.pl']);
+    UserFactory::createMany(7);
 
     $manager->flush();
     }
