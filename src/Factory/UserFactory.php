@@ -31,6 +31,7 @@ use Zenstruck\Foundry\Proxy;
 final class UserFactory extends ModelFactory
 {
     private UserPasswordHasherInterface $passHash;
+
     public function __construct(UserPasswordHasherInterface $passHash)
     {
         parent::__construct();
@@ -44,7 +45,7 @@ final class UserFactory extends ModelFactory
         return [
             'email' => self::faker()->email(),
             'firstName' => self::faker()->firstName(),
-            'password'=> $this->passHash->hashPassword(),
+            'plainPassword' => 'pass',
         ];
     }
 
@@ -52,7 +53,13 @@ final class UserFactory extends ModelFactory
     {
         // see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
         return $this
-            // ->afterInstantiate(function(User $user): void {})
+             ->afterInstantiate(function(User $user) {
+                if($user->getPlainPassword()){
+                  $user -> setPassword(
+                    $this->passHash->hashPassword($user,$user->getPlainPassword())
+                );
+            }
+        })
         ;
     }
 
