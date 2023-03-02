@@ -25,4 +25,11 @@ class SecurityController extends AbstractController
     public function logout(){
        throw new \Exception('logout() should never be reached');
     }
+
+     /**
+     * @Route("/admin", name="app_admin")
+     */
+    public function admin(){
+        throw new \Exception('admin should never be reached');
+     }
 }
