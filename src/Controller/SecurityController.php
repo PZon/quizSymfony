@@ -29,7 +29,7 @@ class SecurityController extends AbstractController
      /**
      * @Route("/admin", name="app_admin")
      */
-    public function admin(){
-        throw new \Exception('admin should never be reached');
+    public function dummyClassAdmin(){
+        throw new \Exception('admin CLASS should never be reached');
      }
 }
