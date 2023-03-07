@@ -15,6 +15,7 @@
                     </div>
                     <div class="col-2 text-end">
                      <small>{{ answer.createdAt|ago }}</small>
+                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                      <div>
                       <form action="{{ path('answer_vote', {id: answer.id})}}" method="POST">
                          <button class="vote-up btn btn-link" name="direction" value="up"><i class="far fa-arrow-alt-circle-up"></i></button>
@@ -22,6 +23,7 @@
                          <span>{{answer.votes}}</span>
                       </form>
                      </div>
+                     {% endif %}
                     </div>
                 </div>
             </li>

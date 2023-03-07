@@ -11,14 +11,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-class AnswerController extends AbstractController{
+class AnswerController extends BaseController{
 
     /**
      * @Route("/answers/{id}/vote", methods="POST", name="answer_vote")
+     * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
      */
-    public function commentVote(Answer $answer, Request $request, EntityManagerInterface $em){
-        $direction= $request->request->get('direction');
+    public function commentVote(Answer $answer, Request $request, EntityManagerInterface $em, LoggerInterface $li){
+
+      $li-> info('{user} is voting on answer {answer}',
+    [
+      'user'=>$this->getUser()->getEmail(),
+      'answer'=>$answer->getId(),
+    ]);
+
+    $direction= $request->request->get('direction');
         if ($direction ==='up'){
            $answer->commentsUpVote();
         }else{
