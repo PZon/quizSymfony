@@ -10,7 +10,9 @@
         {% endblock %}
     </head>
     <body>
-        <nav class="navbar navbar-light bg-light px-3" >
+        <nav 
+            class="navbar navbar-light bg-light px-3" 
+            {{ is_granted('ROLE_PREVIOUS_ADMIN') ? 'style="background-color: brown !important"' }}
           <a class="navbar-brand" href="{{path('homePage')}}">
             <i style="color: #444; font-size: 2rem;" class="pb-1 fad fa-cauldron"></i>
             <p class="pl-2 d-inline font-weight-bold" style="color: #444;">Cauldron Overflow</p>
@@ -27,12 +29,22 @@
                     {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_admin') }}">Admin</a>
+                        <a class="nav-link" href="{{ path('homePage', {
+                                            '_switch_user': 'user@pp.pp'
+                                        }) }}">&nbsp Impersonation &nbsp</a>
                     </li>
                     {% endif %}
                 </ul>
 
                 {% if is_granted('ROLE_USER') %}
                     <h4>Hi {{ app.user.firstName }} &nbsp</h4>
+
+                    {%if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                         <a class="nav-link" href="{{ path('homePage', {
+                                            '_switch_user': '_exit'
+                                        }) }}">&nbsp Exit Impersonation &nbsp</a>
+                    {% endif %}
+
                     <a class="nav-link" href="{{ path('app_logout') }}"> LogOut </a>
                 {% else %}
 
