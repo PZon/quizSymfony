@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
+
 class SecurityController extends AbstractController
 {
     /**
@@ -26,19 +27,4 @@ class SecurityController extends AbstractController
     public function logout(){
        throw new \Exception('logout() should never be reached');
     }
-
-      /**
-     * @Route("/admin", name="app_admin")
-     */
-    public function dummyClassAdmin(){
-        throw new \Exception('admin CLASS should never be reached');
-     }
-     
-     /**
-     * @Route("/admin/login")
-     */
-    public function dummyClassAdminNr2(){
-        return new Response('Pretend admin login page, that should be public');
-     }
-
 }
