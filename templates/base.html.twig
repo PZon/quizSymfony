@@ -10,6 +10,11 @@
         {% endblock %}
     </head>
     <body>
+        {#% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            {{ stimulus_controller('user-api', {
+                url: path('app_user_api_me')
+            }) }}
+        {% endif %#}
         <nav 
             class="navbar navbar-light bg-light px-3" 
             {{ is_granted('ROLE_PREVIOUS_ADMIN') ? 'style="background-color: brown !important"' }}
