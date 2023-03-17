@@ -54,6 +54,7 @@ final class QuestionFactory extends ModelFactory
         'question' => self::faker()->text(),
         'votes' => rand(-13,13),
         'askedAt' => new \DateTimeImmutable(sprintf('-%d days', rand(1, 100))),
+        'owner' => UserFactory::new(),
 
         ];
     }
