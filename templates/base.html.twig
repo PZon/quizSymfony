@@ -33,6 +33,7 @@
                     {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_admin') }}">Admin</a>
+                    </li><li class="nav-item">
                         <a class="nav-link" href="{{ path('homePage', {
                                             '_switch_user': 'user@pp.pp'
                                         }) }}">&nbsp Impersonation &nbsp</a>
@@ -48,8 +49,10 @@
                                             '_switch_user': '_exit'
                                         }) }}">&nbsp Exit Impersonation &nbsp</a>
                     {% endif %}
-
-                    <a class="nav-link" href="{{ path('app_logout') }}"> LogOut </a>
+                    <ul style="list-style-type: none;">
+                     <li><a class="nav-link" href="{{ path('app_2fa_enable') }}"> Enable_2fa </a></li>
+                     <li><a class="nav-link" href="{{ path('app_logout') }}"> LogOut </a></li>
+                    </ul>
                 {% else %}
 
             <a class="nav-link text-black-50 mx-2" href="{{ path('app_login') }}">Log In</a>
