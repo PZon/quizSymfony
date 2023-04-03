@@ -7,4 +7,7 @@ scheb_two_factor:
         # If you're using authenticator-based security (introduced in Symfony 5.1), you have to use this one:
         # - Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken
     totp:
-        enabled: true
+        #change on enabled: true if you wish to use Enable_2fa link
+        enabled: false
+        issuer: 'PZon'
+        template: security/2fa_form.html.twig
